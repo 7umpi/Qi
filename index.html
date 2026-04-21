@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Photo Album</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="album-wrapper">
+
+<div class="book">
+            <!-- Spine -->
+            <div class="spine"></div>
+
+            <!-- Title page – letter PDF -->
+            <div class="page active" data-year="title">
+                <div class="year-label">LETTER</div>
+                <div class="layout layout-title">
+                    <div class="pdf-wrapper" id="pdfWrapper">
+                        <object class="pdf-frame" id="pdfFrame" data="Letter.pdf" type="application/pdf">
+                            <p style="color:#a08060;text-align:center;padding-top:40px;font-size:0.85rem;">
+                                PDF could not be displayed.<br>Place <strong>letter.pdf</strong> in this folder.
+                            </p>
+                        </object>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page 1 – 2022 (mixed sizes: 3 landscape + 1 portrait spanning 2 rows) -->
+            <div class="page" data-year="2022">
+                <div class="year-label">2022</div>
+                <div class="layout layout-1">
+                    <div class="photo size-sample"><img src="pic1-2022.jpeg" alt="Photo 1"></div>
+                    <div class="photo size-sample"><img src="pic2-2022.jpeg" alt="Photo 2"></div>
+                    <div class="photo size-sample"><img src="vid1-22.MOV" alt="Photo 3"></div>
+                    <div class="photo size-sample"><img src="pic4-2022.jpeg" alt="Photo 4"></div>
+                    <div class="photo size-sample"><img src="pic3-2022.jpeg" alt="Photo 5"></div>
+                    <div class="photo size-sample"><img src="pic5-2022.jpeg" alt="Photo 6"></div>
+                    <div class="photo size-sample"><img src="pic7-2022.jpeg" alt="Photo 7"></div>
+                </div>
+            </div>
+
+            <!-- Page 2 -->
+            <div class="page" data-year="2023">
+                <div class="year-label">2023</div>
+                <div class="layout layout-1">
+                    <div class="photo size-sample"><img src="pic7-2023.PNG" alt="2023 Photo 1"></div>
+                    <div class="photo size-sample"><img src="pic2-2023.jpeg" alt="2023 Photo 2"></div>
+                    <div class="photo size-sample"><img src="pic3-2023.jpeg" alt="2023 Photo 3"></div>
+                    <div class="photo size-sample"><img src="pic4-2023.jpeg" alt="2023 Photo 4"></div>
+                    <div class="photo size-sample"><img src="pic9-2023.jpeg" alt="2023 Photo 5"></div>
+                    <div class="photo size-sample"><img src="pic8-2023.jpeg" alt="2023 Photo 6"></div>
+                    <div class="photo size-sample"><img src="pic6-2023.jpeg"Photo 7"></div>
+                </div>
+            </div>
+
+            <!-- Page 3 -->
+            <div class="page" data-year="2024">
+                <div class="year-label">2024</div>
+                <div class="layout layout-1">
+                    <div class="photo size-sample"><img src="pic10-2024.JPG" alt="2024 Photo 1"></div>
+                    <div class="photo size-sample"><img src="pic1-2024.JPEG" alt="2024 Photo 2"></div>
+                    <div class="photo size-sample"><img src="pic3-2024.JPEG" alt="2024 Photo 3"></div>
+                    <div class="photo size-sample"><img src="pic4-2024.JPEG" alt="2024 Photo 4"></div>
+                    <div class="photo size-sample"><img src="pic5-2024.JPG" alt="2024 Photo 5"></div>
+                    <div class="photo size-sample"><img src="pic7-2024.JPG" alt="Photo 6"></div>
+                    <div class="photo size-sample"><img src="pic11-2024.JPG" alt="Photo 7"></div>
+                </div>
+            </div>
+
+            <!-- Page 4 -->
+            <div class="page" data-year="2025">
+                <div class="year-label">2025</div>
+                <div class="layout layout-1">
+                    <div class="photo size-sample"><img src="pic8-2025.JPG" alt="2025 Photo 1"></div>
+                    <div class="photo size-sample"><img src="pic2-2025.JPG" alt="2025 Photo 2"></div>
+                    <div class="photo size-sample"><img src="pic9-2025.JPG" alt="2025 Photo 3"></div>
+                    <div class="photo size-sample"><img src="pic4-2025.JPG" alt="2025 Photo 4"></div>
+                    <div class="photo size-sample"><img src="pic5-2025.JPG" alt="Photo 5"></div>
+                    <div class="photo size-sample"><img src="pic6-2025.JPG" alt="Photo 6"></div>
+                    <div class="photo size-sample"><img src="pic10-2025.JPG" alt="Photo 7"></div>
+                </div>
+            </div>
+
+<!-- Navigation arrows -->
+            <button class="nav-btn prev" id="prevBtn">&#8249;</button>
+            <button class="nav-btn next" id="nextBtn">&#8250;</button>
+
+            <!-- Page counter -->
+            <div class="page-counter"><span id="pageNum">1</span> / <span id="pageTotal">9</span></div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox hidden">
+        <button class="lb-close" id="lbClose">&#10005;</button>
+        <img id="lbImg" src="" alt="">
+        <object id="lbPdf" class="lb-pdf hidden" data="" type="application/pdf"></object>
+    </div>
+    <!-- Copy toast -->
+    <div id="copyToast" class="copy-toast">CSS copied!</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
