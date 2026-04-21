@@ -1,0 +1,535 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: #5d0606;
+    background-image:
+        radial-gradient(ellipse at 20% 50%, #306a30 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 50%, #09410c 0%, transparent 60%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+}
+
+/* ── Outer wrapper positions bookmarks relative to book ── */
+.album-wrapper {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+}
+
+/* ── Bookmarks ── */
+.bookmarks {
+    position: absolute;
+    right: -52px;
+    top: 50px;
+    display: flex;
+    flex-direction: column;
+    z-index: 20;
+}
+
+.bookmark {
+    width: 56px;
+    height: 125px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 0.78rem;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 0 6px 6px 0;
+    box-shadow: 4px 2px 8px rgba(0,0,0,0.45);
+    transition: transform 0.2s, box-shadow 0.2s;
+    clip-path: polygon(14px 0%, 100% 0%, 100% 100%, 14px 100%, 0% 50%);
+    padding-left: 10px;
+    user-select: none;
+    position: relative;
+}
+
+.bookmark + .bookmark {
+    margin-top: -30px;
+}
+
+.bookmark:hover,
+.bookmark.active {
+    transform: translateX(8px);
+    box-shadow: 6px 3px 14px rgba(0,0,0,0.55);
+}
+
+.bm-2022 { background: #c0392b; z-index: 4; }
+.bm-2023 { background: #27ae60; z-index: 3; }
+.bm-2024 { background: #2980b9; z-index: 2; }
+.bm-2025 { background: #8e44ad; z-index: 1; }
+
+/* ── Book ── */
+.book {
+    position: relative;
+    width: 820px;
+    height: 580px;
+    perspective: 2000px;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.7));
+}
+
+/* ── Spine ── */
+.spine {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 28px;
+    height: 100%;
+    background: linear-gradient(to right, #1a0c04, #5c3317 40%, #3b1f0a 70%, #1a0c04);
+    border-radius: 4px 0 0 4px;
+    z-index: 5;
+    box-shadow: inset -4px 0 10px rgba(0,0,0,0.5);
+}
+
+/* ── Pages ── */
+.page {
+    position: absolute;
+    top: 0;
+    left: 28px;
+    width: calc(100% - 28px);
+    height: 100%;
+    background: #fdf6e3;
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 29px,
+            rgba(180,160,120,0.15) 29px,
+            rgba(180,160,120,0.15) 30px
+        );
+    padding: 28px 28px 50px 28px;
+    overflow: hidden;
+    opacity: 0;
+    transform: rotateY(-90deg);
+    transform-origin: left center;
+    transition: transform 0.55s cubic-bezier(.4,0,.2,1), opacity 0.55s;
+    backface-visibility: hidden;
+    border-radius: 0 6px 6px 0;
+    box-shadow: inset -6px 0 18px rgba(0,0,0,0.12), 4px 0 20px rgba(0,0,0,0.3);
+}
+
+.page.active {
+    opacity: 1;
+    transform: rotateY(0deg);
+    z-index: 3;
+}
+
+.page.exit-left {
+    opacity: 0;
+    transform: rotateY(-90deg);
+    z-index: 2;
+}
+
+/* ── Year label ── */
+.year-label {
+    position: absolute;
+    top: 10px;
+    right: 18px;
+    font-size: 0.72rem;
+    font-weight: bold;
+    letter-spacing: 0.15em;
+    color: #a08060;
+    text-transform: uppercase;
+}
+
+/* ── Photo containers ── */
+.photo {
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2), 0 1px 3px rgba(0,0,0,0.15);
+    background: #d0c0a0;
+    cursor: zoom-in;
+    transition: transform 0.2s, box-shadow 0.2s;
+    /* slight photo-paper border */
+    outline: 3px solid #fff;
+    outline-offset: -1px;
+}
+
+.photo:hover {
+    transform: scale(1.03) rotate(0.4deg);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.3);
+    z-index: 10;
+    position: relative;
+}
+
+.photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ── 8 Photo sizes ── */
+.size-landscape  { width: 320px; height: 240px; }
+.size-sample  { width: 140px; height: 220px; }
+.size-sample2 { width: 140px; height: 220px; }
+.size-square     { width: 180px; height: 180px; }
+.size-wide       { width: 400px; height: 180px; }
+.size-panoramic  { width: 100px; height: 60px; }
+.size-hero       { width: 100%; aspect-ratio: 2/3; }
+.size-small      { width: 100%; aspect-ratio: 5/4; }
+.size-thumb      { width: 100%; aspect-ratio: 4/3; max-width: 160px; }
+
+/* ── Layout title: single centered PDF frame ── */
+.layout-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.pdf-wrapper {
+    height: 100%;
+    aspect-ratio: 210 / 297;
+    cursor: zoom-in;
+    border-radius: 4px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2), 0 1px 3px rgba(0,0,0,0.15);
+    outline: 3px solid #fff;
+    outline-offset: -1px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pdf-wrapper:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.3);
+}
+
+.pdf-wrapper .pdf-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    background: #fff;
+    pointer-events: none;
+}
+
+/* ── Layout 1: free placement — edit top/left/width/height per photo ── */
+.layout-1 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+/* Photo 1 — changed: width 320px→330px, height 240px→220px (uniform size) */
+.layout-1 .photo:nth-child(1) { position: absolute; top: 0px;   left: 0px;   width: 100px; height: 220px; }
+/* Photo 2 — changed: left 500px→340px, width 180px→330px, height 380px→220px (uniform size) */
+.layout-1 .photo:nth-child(2) { position: absolute; top: 0px;   left: 110px; width: 330px; height: 220px; }
+/* Photo 3 — changed: top 260px→230px, width 200px→330px, height 200px→220px (uniform size) */
+.layout-1 .photo:nth-child(3) { position: absolute; top: 0px; left: 450px;   width: 270px; height: 220px; }
+/* Photo 4 — changed: top 260px→230px, left 210px→340px, width 300px→330px, height 150px→220px (uniform size) */
+.layout-1 .photo:nth-child(4) { position: absolute; top: 240px; left: 0p; width: 250px; height: 220px; }
+/* Photo 5 — changed: top 260px→230px, left 540px→450px, width 200px→100px, height 200px→220px (uniform height, smaller width for balance) */
+.layout-1 .photo:nth-child(5) { position: absolute; top: 240px;   left: 260px; width: 140px; height: 220px; }
+.layout-1 .photo:nth-child(6) { position: absolute; top: 240px; left: 410px; width: 210px; height: 220px; }
+.layout-1 .photo:nth-child(7) { position: absolute; top: 240px; left: 630px; width: 90px; height: 220px; }
+
+/* ── Layout 2: hero left tall, 3 stacked right ── */
+.layout-2 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+/* Photo 1 — changed: width 320px→330px, height 240px→220px (uniform size) */
+.layout-2 .photo:nth-child(1) { position: absolute; top: 0px;   left: 0px;   width: 100px; height: 220px; }
+/* Photo 2 — changed: left 500px→340px, width 180px→330px, height 380px→220px (uniform size) */
+.layout-2 .photo:nth-child(2) { position: absolute; top: 0px;   left: 110px; width: 100px; height: 220px; }
+/* Photo 3 — changed: top 260px→230px, width 200px→330px, height 200px→220px (uniform size) */
+.layout-2 .photo:nth-child(3) { position: absolute; top: 0px; left: 450px;   width: 270px; height: 220px; }
+/* Photo 4 — changed: top 260px→230px, left 210px→340px, width 300px→330px, height 150px→220px (uniform size) */
+.layout-2 .photo:nth-child(4) { position: absolute; top: 240px; left: 0px; width: 100px; height: 220px; }
+/* Photo 5 — changed: top 260px→230px, left 540px→450px, width 200px→100px, height 200px→220px (uniform height, smaller width for balance) */
+.layout-2 .photo:nth-child(5) { position: absolute; top: 240px;   left: 310px; width: 100px; height: 220px; }
+
+.layout-2 .photo:nth-child(6) { position: absolute; top: 0px; left: 0px; width: 400px; height: 100%; }
+
+
+/* ── Layout 3: same as layout-2 ── */
+.layout-3 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.layout-3 .photo:nth-child(1) { position: absolute; top: 0px;   left: 0px;   width: 100px; height: 220px; }
+.layout-3 .photo:nth-child(2) { position: absolute; top: 0px;   left: 110px; width: 100px; height: 220px; }
+.layout-3 .photo:nth-child(3) { position: absolute; top: 0px;   left: 450px; width: 270px; height: 220px; }
+.layout-3 .photo:nth-child(4) { position: absolute; top: 240px; left: 0px;   width: 100px; height: 220px; }
+.layout-3 .photo:nth-child(5) { position: absolute; top: 240px; left: 310px; width: 100px; height: 220px; }
+.layout-3 .photo:nth-child(6) { position: absolute; top: 0px;   left: 0px;   width: 400px; height: 100%; }
+
+/* ── Layout 4: same as layout-2 ── */
+.layout-4 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.layout-4 .photo:nth-child(1) { position: absolute; top: 0px;   left: 0px;   width: 100px; height: 220px; }
+.layout-4 .photo:nth-child(2) { position: absolute; top: 0px;   left: 110px; width: 100px; height: 220px; }
+.layout-4 .photo:nth-child(3) { position: absolute; top: 0px;   left: 450px; width: 270px; height: 220px; }
+.layout-4 .photo:nth-child(4) { position: absolute; top: 240px; left: 0px;   width: 100px; height: 220px; }
+.layout-4 .photo:nth-child(5) { position: absolute; top: 240px; left: 310px; width: 100px; height: 220px; }
+.layout-4 .photo:nth-child(6) { position: absolute; top: 0px;   left: 0px;   width: 400px; height: 100%; }
+
+/* ── Navigation buttons ── */
+.nav-btn {
+    position: absolute;
+    bottom: 14px;
+    background: rgba(60,35,10,0.75);
+    color: #e8d8b8;
+    border: 1px solid rgba(200,170,100,0.35);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 15;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:hover { background: rgba(100,55,15,0.9); }
+.nav-btn.prev { left: 50px; }
+.nav-btn.next { right: 24px; }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+/* ── Page counter ── */
+.page-counter {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.72rem;
+    color: #a08060;
+    letter-spacing: 0.1em;
+    z-index: 15;
+}
+
+/* ── Lightbox ── */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    cursor: zoom-out;
+}
+.lightbox.hidden { display: none; }
+.lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 4px;
+    box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    outline: 4px solid #fff;
+}
+
+.lb-pdf {
+    width: min(60vw, calc(85vh * 210 / 297));
+    height: 85vh;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    outline: 4px solid #fff;
+    display: block;
+    background: #fff;
+}
+
+.lb-pdf.hidden { display: none; }
+.lb-close {
+    position: absolute;
+    top: 20px;
+    right: 28px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+.lb-close:hover { opacity: 1; }
+
+/* ── Size Editor Panel ── */
+.size-editor {
+    position: fixed;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    z-index: 500;
+    font-family: 'Georgia', serif;
+}
+
+.editor-toggle {
+    background: rgba(60,35,10,0.9);
+    color: #e8d8b8;
+    border: 1px solid rgba(200,170,100,0.4);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+.editor-toggle:hover { background: rgba(100,55,15,0.95); }
+
+.editor-body {
+    background: rgba(28,17,6,0.96);
+    border: 1px solid rgba(200,170,100,0.25);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-top: 8px;
+    width: 270px;
+    max-height: 70vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.size-editor.collapsed .editor-body {
+    display: none;
+}
+
+.editor-header {
+    color: #d4b483;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.editor-hint {
+    color: #7a6040;
+    font-size: 0.68rem;
+    margin-bottom: 14px;
+}
+
+/* Each size row */
+.size-row {
+    margin-bottom: 14px;
+}
+
+.size-row-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #c8a86a;
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.size-preview-tag {
+    background: rgba(200,168,100,0.15);
+    border: 1px solid rgba(200,168,100,0.3);
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-size: 0.65rem;
+    color: #a08858;
+    font-weight: normal;
+    letter-spacing: 0;
+}
+
+.slider-group {
+    display: grid;
+    grid-template-columns: 28px 1fr 32px;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.slider-axis {
+    color: #7a6040;
+    font-size: 0.65rem;
+    text-align: right;
+}
+
+.size-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(200,170,100,0.2);
+    outline: none;
+    cursor: pointer;
+}
+.size-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #c8a86a;
+    cursor: pointer;
+    border: 2px solid #3b2006;
+    transition: background 0.15s;
+}
+.size-slider::-webkit-slider-thumb:hover { background: #e8c880; }
+
+.slider-val {
+    color: #d4b483;
+    font-size: 0.68rem;
+    text-align: left;
+    min-width: 24px;
+}
+
+.size-divider {
+    border: none;
+    border-top: 1px solid rgba(200,170,100,0.1);
+    margin: 10px 0;
+}
+
+/* Actions */
+.editor-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+}
+.editor-actions button {
+    flex: 1;
+    background: rgba(60,35,10,0.8);
+    color: #c8a86a;
+    border: 1px solid rgba(200,170,100,0.3);
+    border-radius: 5px;
+    padding: 6px 0;
+    font-size: 0.7rem;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: background 0.2s;
+}
+.editor-actions button:hover { background: rgba(100,55,15,0.9); }
+
+/* Copy toast */
+.copy-toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(200,168,100,0.95);
+    color: #1a0c04;
+    padding: 8px 22px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 999;
+}
+.copy-toast.show { opacity: 1; }
